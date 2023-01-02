@@ -1,11 +1,15 @@
 package logger
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
 
+	"github.com/hahamx/utools/logger"
+	"github.com/hahamx/utools/utils/env"
+	"github.com/hahamx/utools/utils/timeutil"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -17,6 +21,27 @@ const (
 
 	// DefaultTimeLayout the default time layout;
 	DefaultTimeLayout = time.RFC3339
+)
+
+var (
+	BaseLog     = "./logs/"
+	ProjectName = "strtech-api"
+
+	ProjectAccessLogFile = BaseLog + ProjectName + "-access.log"
+	MonthDate            = map[string]int{
+		"December":  12,
+		"November":  11,
+		"October":   10,
+		"September": 9,
+		"August":    8,
+		"July":      7,
+		"June":      6,
+		"May":       5,
+		"April":     4,
+		"March":     3,
+		"February":  2,
+		"January":   1,
+	}
 )
 
 // Option custom setup config
@@ -243,4 +268,25 @@ func WrapMeta(err error, metas ...Meta) (fields []zap.Field) {
 	}
 
 	return
+}
+
+// 创建一个新的日志记录器
+func NewLogger(TName string) *zap.SugaredLogger {
+	y, month, d := time.Now().Date()
+	minthInt := MonthDate[month.String()]
+	days := fmt.Sprintf("%v%v%v/", y, minthInt, d)
+	if TName == "" {
+		TName = "default"
+	}
+	logFileName := BaseLog + days + TName + "_access.log"
+	accessLogger, err := logger.NewJSONLogger(
+		logger.WithDisableConsole(),
+		logger.WithField("configs", fmt.Sprintf("%s[%s]", TName, env.Active().Value())),
+		logger.WithTimeLayout(timeutil.CSTLayout),
+		logger.WithFileP(logFileName),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return accessLogger.Sugar()
 }
