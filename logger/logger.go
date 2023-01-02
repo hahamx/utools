@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/hahamx/utools/logger"
 	"github.com/hahamx/utools/utils/env"
 	"github.com/hahamx/utools/utils/timeutil"
 	"go.uber.org/zap"
@@ -272,6 +271,7 @@ func WrapMeta(err error, metas ...Meta) (fields []zap.Field) {
 
 // 创建一个新的日志记录器
 func NewLogger(TName string) *zap.SugaredLogger {
+
 	y, month, d := time.Now().Date()
 	minthInt := MonthDate[month.String()]
 	days := fmt.Sprintf("%v%v%v/", y, minthInt, d)
@@ -279,11 +279,11 @@ func NewLogger(TName string) *zap.SugaredLogger {
 		TName = "default"
 	}
 	logFileName := BaseLog + days + TName + "_access.log"
-	accessLogger, err := logger.NewJSONLogger(
-		logger.WithDisableConsole(),
-		logger.WithField("configs", fmt.Sprintf("%s[%s]", TName, env.Active().Value())),
-		logger.WithTimeLayout(timeutil.CSTLayout),
-		logger.WithFileP(logFileName),
+	accessLogger, err := NewJSONLogger(
+		WithDisableConsole(),
+		WithField("configs", fmt.Sprintf("%s[%s]", TName, env.Active().Value())),
+		WithTimeLayout(timeutil.CSTLayout),
+		WithFileP(logFileName),
 	)
 	if err != nil {
 		panic(err)
