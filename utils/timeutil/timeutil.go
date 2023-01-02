@@ -7,7 +7,21 @@ import (
 )
 
 var (
-	cst *time.Location
+	cst       *time.Location
+	MonthDate = map[string]int{
+		"December":  12,
+		"November":  11,
+		"October":   10,
+		"September": 9,
+		"August":    8,
+		"July":      7,
+		"June":      6,
+		"May":       5,
+		"April":     4,
+		"March":     3,
+		"February":  2,
+		"January":   1,
+	}
 )
 
 // CSTLayout China Standard Time Layout
