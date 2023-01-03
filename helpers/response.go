@@ -34,7 +34,7 @@ func Err(errCode int, msg string, err error) *Response {
 }
 
 // 成功 统一200, 如果code为0，将在这里转换，omitempty 如果为零值 转json时就忽略不必要的字段
-func JSONs(ctx *gin.Context, code int, datas any) {
+func JSONs(ctx *gin.Context, code int, datas interface{}) {
 	if code == 0 {
 		code = 200
 	}
@@ -51,7 +51,7 @@ func JSONs(ctx *gin.Context, code int, datas any) {
 /*
 从任意结构体去除data 和相关字段
 */
-func BuildResponse(code int, datas any) *Response {
+func BuildResponse(code int, datas interface{}) *Response {
 
 	var sr = &Response{}
 
