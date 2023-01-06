@@ -7,11 +7,11 @@ import (
 )
 
 var (
-	Logger                       = log.New(os.Stderr, "DEBUG -", 13)
-	FieldCreateCronTaskWithTable = []string{"name", "spec", "command"}
+	Logger                   = log.New(os.Stderr, "DEBUG -", 13)
+	FieldCreateTaskWithTable = []string{"name", "spec", "command"}
 )
 
-type CreateCronTaskWithTable struct {
+type CreateTaskWithTable struct {
 	Id                  int64  `json:"id"`
 	TableName           string `json:"table_name"`
 	PriKey              string `json:"pri_key"`
@@ -55,7 +55,7 @@ type RedisCronTask struct {
 
 type RedisCronTaskData struct {
 	Total int64
-	Data  []CreateCronTaskWithTable
+	Data  []CreateTaskWithTable
 	Size  int64
 }
 
@@ -182,5 +182,3 @@ var ZhCNText = map[int]string{
 	CronDetailError:  "获取定时任务详情失败",
 	CronExecuteError: "手动执行定时任务失败",
 }
-
-

@@ -2,14 +2,22 @@ package env
 
 import (
 	"flag"
-	"fmt"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
+
+var mode = setMode()
+
+func setMode() bool {
+	gin.SetMode(gin.ReleaseMode)
+	return true
+}
 
 var (
 	active Environment
 	dev    Environment = &environment{value: "dev"}
-	fat    Environment = &environment{value: "fat"}
+	fat    Environment = &environment{value: "test"}
 	uat    Environment = &environment{value: "uat"}
 	pro    Environment = &environment{value: "pro"}
 )
@@ -67,7 +75,6 @@ func init() {
 		active = pro
 	default:
 		active = fat
-		fmt.Println("Warning: '-env' cannot be found, or it is illegal. The default 'fat' will be used.")
 	}
 }
 
